@@ -1,0 +1,25 @@
+services:
+  php:
+    build:
+      context: ./php
+    volumes:
+      - ./app:/app
+    user: 1000:1000
+  db:
+    image: mariadb
+    volumes:
+      - ./db_data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: stronkpass
+      MARIADB_DATABASE: shop
+      MARIADB_USER: shopuser
+      MARIADB_PASSWORD: shoper
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./app:/app
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - php
